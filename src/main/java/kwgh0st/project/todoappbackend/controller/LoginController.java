@@ -54,7 +54,7 @@ public class LoginController {
             throw new InvalidResetPasswordTokenException(InvalidResetPasswordTokenException.MESSAGE);
         }
 
-        String frontendRedirectUrl = env.getProperty("spring.client.url") + "user/login/reset-password";
+        String frontendRedirectUrl = env.getProperty("spring.client.url") + "/user/login/reset-password";
 
         ModelAndView modelAndView = new ModelAndView(new RedirectView(frontendRedirectUrl));
         modelAndView.addObject("passwordToken", token);
@@ -85,7 +85,7 @@ public class LoginController {
         if (userService.isValidUpdatePropertiesToken(token))
             throw new InvalidUpdatePropertiesTokenException(InvalidUpdatePropertiesTokenException.MESSAGE);
 
-        String frontendRedirectUrl = env.getProperty("spring.client.url") + "user/login/update-credentials";
+        String frontendRedirectUrl = env.getProperty("spring.client.url") + "/user/login/update-credentials";
         ModelAndView modelAndView = new ModelAndView(new RedirectView(frontendRedirectUrl));
         modelAndView.addObject("updatePropertiesToken", token);
 

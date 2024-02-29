@@ -48,7 +48,7 @@ public class RegistrationController {
         try {
             userService.validateVerificationToken(token);
         } catch (InvalidRegistrationTokenException ex) {
-            return new ModelAndView("redirect:" + env.getProperty("spring.client.url") + "verification-error");
+            return new ModelAndView("redirect:" + env.getProperty("spring.client.url") + "/verification-error");
         }
 
         ModelAndView modelAndView = new ModelAndView(new RedirectView(env.getProperty("spring.client.url") + "login"));
