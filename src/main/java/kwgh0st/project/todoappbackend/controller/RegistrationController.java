@@ -51,7 +51,7 @@ public class RegistrationController {
             return new ModelAndView("redirect:" + env.getProperty("spring.client.url") + "/verification-error");
         }
 
-        ModelAndView modelAndView = new ModelAndView(new RedirectView(env.getProperty("spring.client.url") + "login"));
+        ModelAndView modelAndView = new ModelAndView(new RedirectView(env.getProperty("spring.client.url") + "/login"));
         modelAndView.addObject("confirmationSuccess", true);
 
         return modelAndView;
