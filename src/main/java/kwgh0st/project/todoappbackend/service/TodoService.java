@@ -49,7 +49,13 @@ public class TodoService {
     }
 
     public Todo addNewTodo(Todo todo) {
-        return todoRepository.save(todo);
+        Todo createdTodo = new Todo();
+        createdTodo.setUsername(todo.getUsername());
+        createdTodo.setDone(todo.isDone());
+        createdTodo.setDescription(todo.getDescription());
+        createdTodo.setTargetDate(todo.getTargetDate());
+
+        return todoRepository.save(createdTodo);
     }
 
 }

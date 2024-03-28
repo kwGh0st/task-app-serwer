@@ -16,14 +16,10 @@ public class TodoController {
     private final TodoService todoService;
 
 
-
-
-
     @GetMapping("/{username}/todos")
     public List<Todo> getAllTodos(@PathVariable String username) {
         return todoService.getTodoByUsername(username);
     }
-
 
 
     @GetMapping("/{username}/todos/{id}")
@@ -47,14 +43,8 @@ public class TodoController {
 
 
     @PostMapping("/{username}/todos")
-    public Todo createTodo(@RequestBody Todo todo) {
+    public Todo createTodo(@RequestBody Todo todo)  {
 
-        Todo createdTodo = new Todo();
-        createdTodo.setUsername(todo.getUsername());
-        createdTodo.setDone(todo.isDone());
-        createdTodo.setDescription(todo.getDescription());
-        createdTodo.setTargetDate(todo.getTargetDate());
-
-        return todoService.addNewTodo(createdTodo);
+        return todoService.addNewTodo(todo);
     }
 }
