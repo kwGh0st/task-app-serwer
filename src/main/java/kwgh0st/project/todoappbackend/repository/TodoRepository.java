@@ -1,5 +1,6 @@
 package kwgh0st.project.todoappbackend.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,5 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface TodoRepository extends JpaRepository<Todo, Long>{
 
    Optional<List<Todo>> findByUsername(String username);
+   Optional<List<Todo>>findByUsernameAndTargetDate(String username, LocalDate date);
 
 }

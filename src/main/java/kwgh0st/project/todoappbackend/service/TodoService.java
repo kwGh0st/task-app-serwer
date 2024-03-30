@@ -4,8 +4,11 @@ import jakarta.transaction.Transactional;
 import kwgh0st.project.todoappbackend.exception.ResourceNotFoundException;
 import kwgh0st.project.todoappbackend.model.Todo;
 import kwgh0st.project.todoappbackend.repository.TodoRepository;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Transactional
@@ -56,6 +59,11 @@ public class TodoService {
         createdTodo.setTargetDate(todo.getTargetDate());
 
         return todoRepository.save(createdTodo);
+    }
+
+    public List<Todo> getTodosForToday(String username, LocalDate date) {
+
+        return todoRepository.findByUsernameAndTargetDate(username, date).orElse(Collections.emptyList());
     }
 
 }

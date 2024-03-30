@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,6 +50,7 @@ public class UserService {
                 .email(userDTO.getEmail())
                 .role(Role.USER)
                 .enabled(false)
+                .wantTodosNotification(userDTO.isWantTodosNotification())
                 .accountNonLocked(true)
                 .registrationDate(LocalDate.now())
                 .build());
@@ -70,6 +72,7 @@ public class UserService {
                         .email(userDTO.getEmail())
                         .role(Role.ADMIN)
                         .enabled(userDTO.isEnabled())
+                        .wantTodosNotification(userDTO.isWantTodosNotification())
                         .accountNonLocked(userDTO.isAccountNonLocked())
                         .registrationDate(LocalDate.now())
                         .build());
@@ -81,7 +84,7 @@ public class UserService {
             throw new EmailAlreadyExistException(EmailAlreadyExistException.MESSAGE);
         }
 
-       return userRepository.save(
+        return userRepository.save(
                 User
                         .builder()
                         .username("")
@@ -91,18 +94,6 @@ public class UserService {
                         .build());
 
     }
-
-//    @Transactional
-//    public void updateUserById(Long id, UserDTO userDTO) {
-//        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(UserNotFoundException.MESSAGE));
-//
-//        user.setRole(Role.valueOf(userDTO.getRole()));
-//        user.setAccountNonLocked(userDTO.isAccountNonLocked());
-//        user.setUsername(userDTO.getUsername());
-//        user.setEmail(userDTO.getEmail());
-//
-//        userRepository.save(user);
-//    }
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmailIgnoreCase(email).orElse(null);
@@ -119,6 +110,10 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public List<User> getUserByWantNotification() {
+        return userRepository.findByWantTodosNotificationTrue().orElse(Collections.emptyList());
     }
 
     public User getUserById(Long id) {

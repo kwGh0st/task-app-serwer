@@ -26,6 +26,7 @@ public class User implements UserDetails {
     private String email;
     private boolean enabled;
     private boolean accountNonLocked = true;
+    private boolean wantTodosNotification = true;
     private LocalDate registrationDate;
     @Enumerated(EnumType.STRING)
     private Role role;

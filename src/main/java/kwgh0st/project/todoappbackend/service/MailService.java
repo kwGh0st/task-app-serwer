@@ -1,6 +1,7 @@
 package kwgh0st.project.todoappbackend.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kwgh0st.project.todoappbackend.model.Todo;
 import kwgh0st.project.todoappbackend.model.User;
 import kwgh0st.project.todoappbackend.model.VerificationToken;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 
 @Service
@@ -19,7 +21,7 @@ public class MailService {
     private final MessageSource messages;
     private final SimpleMailMessage email;
 
-    public void ResendVerificationTokenEmail(final HttpServletRequest request, final User user) {
+    public void resendVerificationTokenEmail(final HttpServletRequest request, final User user) {
         mailSender.send(constructResendVerificationTokenEmail(getAppUrl(request), request.getLocale(), user.getVerificationToken(), user));
     }
 
@@ -49,6 +51,10 @@ public class MailService {
 
     public void sendAccountCreatedByAdminMessage(final HttpServletRequest request, final User user) {
         mailSender.send(constructAccountCreatedByAdminMessage(getAppUrl(request), user.getUpdatePropertiesToken().getToken(), user, request.getLocale()));
+    }
+
+    public void sendNotificationEmail(final User user, final List<Todo> todos) {
+        mailSender.send(constructTodoNotificationEmail(user, todos));
     }
 
     private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationToken newToken, final User user) {
@@ -110,12 +116,35 @@ public class MailService {
         return constructEmail(subject, body, user.getEmail());
     }
 
+    private SimpleMailMessage constructTodoNotificationEmail(User user, List<Todo> todos) {
+        final String subject = "Your Todos for today!";
+
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append(messages.getMessage("message.todosNotification", null, Locale.ENGLISH));
+        messageBuilder.append("\n\n");
+
+        int todosCount = Math.min(5, todos.size());
+
+        for (int i = 0; i < todosCount; i++) {
+            Todo todo = todos.get(i);
+            messageBuilder.append(i + 1).append(". ").append(todo.getDescription()).append("\n");
+        }
+
+        if (todos.size() > 5) {
+            int remainingTodos = todos.size() - 5;
+            messageBuilder.append("\nand ").append(remainingTodos).append(" more...");
+        }
+
+        return constructEmail(subject, messageBuilder.toString(), user.getEmail());
+    }
+
     private SimpleMailMessage constructEmail(String subject, String body, String toEmail) {
         email.setSubject(subject);
         email.setText(body);
         email.setTo(toEmail);
         return email;
     }
+
 
     private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();

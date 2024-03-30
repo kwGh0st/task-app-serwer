@@ -21,5 +21,6 @@ public class UserDTO {
     private boolean accountNonLocked;
     private String role;
     private LocalDate registrationDate;
+    private boolean wantTodosNotification;
 
 }
