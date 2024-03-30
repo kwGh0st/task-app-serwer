@@ -31,7 +31,7 @@ public class EncryptionService implements AttributeConverter<String, String> {
             Cipher cipher = Cipher.getInstance(algo);
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, iv);
 
-            byte[] encrypted = cipher.doFinal(value.getBytes());
+            byte[] encrypted = cipher.doFinal(value.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(encrypted);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -47,7 +47,7 @@ public class EncryptionService implements AttributeConverter<String, String> {
             Cipher cipher = Cipher.getInstance(algo);
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, iv);
 
-            byte[] original = cipher.doFinal(Base64.getDecoder().decode(encrypted));
+            byte[] original = cipher.doFinal(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.UTF_8)));
             return new String(original);
         } catch (Exception ex) {
             ex.printStackTrace();
