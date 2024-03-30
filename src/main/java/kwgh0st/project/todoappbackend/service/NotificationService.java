@@ -26,7 +26,7 @@ public class NotificationService {
     }
 
     @Async
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void checkAndSendNotifications() {
         System.out.println("NOTES");
         List<User> users = userService.getUserByWantNotification();
