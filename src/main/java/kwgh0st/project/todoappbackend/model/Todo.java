@@ -25,6 +25,7 @@ public class Todo {
     private String username;
     @Convert(converter = EncryptionService.class)
     @Size(min = 5)
+    @Column(length = 1024)
     private String description;
     @NotNull
     private LocalDate targetDate;
