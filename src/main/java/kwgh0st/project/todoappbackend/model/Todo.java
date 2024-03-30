@@ -1,11 +1,9 @@
 package kwgh0st.project.todoappbackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import kwgh0st.project.todoappbackend.service.EncryptionService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,11 +23,11 @@ public class Todo {
     @NotNull
     @Size(min = 5, max = 16)
     private String username;
-    @NotNull
+    @Convert(converter = EncryptionService.class)
+    @Size(min = 5)
     private String description;
     @NotNull
     private LocalDate targetDate;
     private boolean done;
-
 
 }

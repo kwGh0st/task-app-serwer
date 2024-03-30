@@ -1,54 +1,67 @@
 package kwgh0st.project.todoappbackend.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.persistence.AttributeConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.security.SecureRandom;
 import java.util.Base64;
 
+
 @Service
-public class EncryptionService {
-    private static final String ALGORITHM = "AES";
-    private static final byte[] KEY = generateKey();
-    private static final Logger logger = LoggerFactory.getLogger(EncryptionService.class);
+public class EncryptionService implements AttributeConverter<String, String> {
 
-    public static String encrypt(String value) {
+    @Value("${spring.encryption.key}")
+    private String key;
+
+    @Value("${spring.init.vector}")
+    private String initVector;
+
+    @Value("${spring.encryption.algorithm}")
+    private String algo;
+
+    private String encrypt(String value) {
         try {
-            Key key = new SecretKeySpec(KEY, ALGORITHM);
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            byte[] encryptedBytes = cipher.doFinal(value.getBytes(StandardCharsets.UTF_8));
-            return Base64.getEncoder().encodeToString(encryptedBytes);
-        } catch (Exception ex) {
-            logger.debug(ex.getMessage());
-        }
+            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes(StandardCharsets.UTF_8));
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
 
-        return value;
+            Cipher cipher = Cipher.getInstance(algo);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, iv);
+
+            byte[] encrypted = cipher.doFinal(value.getBytes());
+            return Base64.getEncoder().encodeToString(encrypted);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
-    public static String decrypt(String encryptedValue) {
+    private String decrypt(String encrypted) {
         try {
-            Key key = new SecretKeySpec(KEY, ALGORITHM);
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedValue.getBytes(StandardCharsets.UTF_8)));
-            return new String(decryptedBytes);
+            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes(StandardCharsets.UTF_8));
+            SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+
+            Cipher cipher = Cipher.getInstance(algo);
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, iv);
+
+            byte[] original = cipher.doFinal(Base64.getDecoder().decode(encrypted));
+            return new String(original);
         } catch (Exception ex) {
-            logger.debug(ex.getMessage());
+            ex.printStackTrace();
         }
-        return encryptedValue;
+        return null;
     }
 
-    private static byte[] generateKey() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] key = new byte[16];
-        secureRandom.nextBytes(key);
-        return key;
+    @Override
+    public String convertToDatabaseColumn(String attribute) {
+        return encrypt(attribute);
     }
 
+    @Override
+    public String convertToEntityAttribute(String dbData) {
+        return decrypt(dbData);
+    }
 }
