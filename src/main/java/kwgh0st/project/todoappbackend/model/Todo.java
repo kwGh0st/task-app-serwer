@@ -27,7 +27,7 @@ public class Todo {
     @Size(min = 5, max = 16)
     private String username;
     @NotNull
-    @Size(min = 3, max = 256)
+    @Size(min = 3, max = 1024)
     private String description;
     @NotNull
     private LocalDate targetDate;

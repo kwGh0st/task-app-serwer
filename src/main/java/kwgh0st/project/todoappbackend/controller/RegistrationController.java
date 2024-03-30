@@ -73,7 +73,7 @@ public class RegistrationController {
 
 
         userService.generateNewVerificationToken(user.getVerificationToken().getToken());
-        mailService.ResendVerificationTokenEmail(request, user);
+        mailService.resendVerificationTokenEmail(request, user);
 
         return ResponseEntity.ok(NEW_TOKEN_SEND);
     }

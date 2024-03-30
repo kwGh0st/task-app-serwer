@@ -1,4 +1,4 @@
-package kwgh0st.project.todoappbackend.service;
+package kwgh0st.project.todoappbackend.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

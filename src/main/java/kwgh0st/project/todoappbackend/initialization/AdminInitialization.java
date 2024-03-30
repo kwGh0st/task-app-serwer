@@ -1,6 +1,5 @@
-package kwgh0st.project.todoappbackend.service.initialization;
+package kwgh0st.project.todoappbackend.initialization;
 
-import kwgh0st.project.todoappbackend.model.Role;
 import kwgh0st.project.todoappbackend.model.User;
 import kwgh0st.project.todoappbackend.model.dto.UserDTO;
 import kwgh0st.project.todoappbackend.service.UserService;
@@ -31,11 +30,12 @@ public class AdminInitialization implements ApplicationRunner {
                 userService.registerNewAdminAccount(
                         UserDTO
                                 .builder()
-                                .username(env.getProperty("spring.init.admin.username" ))
+                                .username(env.getProperty("spring.init.admin.username"))
                                 .password(env.getProperty("spring.init.admin.password"))
                                 .email(env.getProperty("spring.init.admin.email"))
                                 .enabled(true)
                                 .accountNonLocked(true)
+                                .wantTodosNotification(true)
                                 .build());
             } catch (Exception e) {
                 e.printStackTrace();
