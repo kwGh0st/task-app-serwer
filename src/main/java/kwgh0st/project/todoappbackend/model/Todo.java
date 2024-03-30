@@ -23,7 +23,7 @@ public class Todo {
     @NotNull
     @Size(min = 5, max = 16)
     private String username;
-//    @Convert(converter = EncryptionService.class)
+    @Convert(converter = EncryptionService.class)
     @Size(min = 5)
     @Column(length = 1024)
     private String description;
