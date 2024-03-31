@@ -3,7 +3,6 @@ package kwgh0st.project.todoappbackend.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import kwgh0st.project.todoappbackend.service.EncryptionService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +22,7 @@ public class Todo {
     @NotNull
     @Size(min = 5, max = 16)
     private String username;
-    @Convert(converter = EncryptionService.class)
+    //    @Convert(converter = EncryptionService.class)
     @Size(min = 5)
     @Column(length = 1024)
     private String description;

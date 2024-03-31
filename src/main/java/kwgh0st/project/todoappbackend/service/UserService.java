@@ -104,6 +104,7 @@ public class UserService {
         return userRepository.findByPasswordResetToken(token).orElse(null);
     }
 
+
     public User getUserByUsername(String username) {
         return userRepository.findByUsernameIgnoreCase(username).orElse(null);
     }
@@ -131,6 +132,13 @@ public class UserService {
 
     private boolean usernameExists(String username) {
         return userRepository.findByUsernameIgnoreCase(username).isPresent();
+    }
+
+    @Transactional
+    public void updateUserWantNotification(String username, boolean sendNotification) {
+        User updated = userRepository.findByUsernameIgnoreCase(username).orElseThrow(() -> new UserNotFoundException(UserNotFoundException.MESSAGE));
+        updated.setWantTodosNotification(sendNotification);
+        userRepository.save(updated);
     }
 
     @Transactional

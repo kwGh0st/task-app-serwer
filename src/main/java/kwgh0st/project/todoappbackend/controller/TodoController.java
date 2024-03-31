@@ -1,8 +1,11 @@
 package kwgh0st.project.todoappbackend.controller;
 
+import kwgh0st.project.todoappbackend.exception.UserNotFoundException;
 import kwgh0st.project.todoappbackend.model.Todo;
 import kwgh0st.project.todoappbackend.service.TodoService;
+import kwgh0st.project.todoappbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TodoController {
     private final TodoService todoService;
+    private final UserService userService;
+
+    private static final String UPDATE_NOTIFICATIONS = "Notifications updated.";
 
 
     @GetMapping("/{username}/todos")
@@ -43,8 +49,19 @@ public class TodoController {
 
 
     @PostMapping("/{username}/todos")
-    public Todo createTodo(@RequestBody Todo todo)  {
-
+    public Todo createTodo(@RequestBody Todo todo) {
         return todoService.addNewTodo(todo);
+    }
+
+
+    @PostMapping("/{username}/{notifications}")
+    public ResponseEntity<String> updateNotifications(@PathVariable String username, @PathVariable boolean notifications) {
+        try {
+            userService.updateUserWantNotification(username, notifications);
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+
+        return ResponseEntity.ok().body(UPDATE_NOTIFICATIONS);
     }
 }

@@ -28,7 +28,6 @@ public class UserController {
     private static final String USER_ACCOUNT_DELETED = "User account deleted! You will be logout.";
     private static final String EMAIL_OLD_AND_NEW_SAME = "The new email must be different from the old one!";
 
-
     @GetMapping("/fetch-data/{username}")
     public ResponseEntity<UserDTO> fetchUserData(@PathVariable String username) {
         User user = userService.getUserByUsername(username);
@@ -37,9 +36,10 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(UserDTO
                 .builder()
-                        .id(user.getId())
+                .id(user.getId())
                 .email
                         (user.getEmail())
+                .wantTodosNotification(user.isWantTodosNotification())
                 .build());
     }
 

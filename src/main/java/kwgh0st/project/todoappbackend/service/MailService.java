@@ -135,6 +135,8 @@ public class MailService {
             messageBuilder.append("\nand ").append(remainingTodos).append(" more...");
         }
 
+        messageBuilder.append("If you don't want those emails you can change this in your todo options panel.");
+
         return constructEmail(subject, messageBuilder.toString(), user.getEmail());
     }
 
