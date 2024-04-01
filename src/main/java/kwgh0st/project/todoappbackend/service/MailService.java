@@ -120,7 +120,7 @@ public class MailService {
         final String subject = "Your Todos for today!";
 
         StringBuilder messageBuilder = new StringBuilder();
-        messageBuilder.append(messages.getMessage("message.todosNotification", null, Locale.ENGLISH));
+        messageBuilder.append(messages.getMessage("message.todosNotification", null, Locale.ROOT));
         messageBuilder.append("\n\n");
 
         int todosCount = Math.min(5, todos.size());
@@ -132,10 +132,10 @@ public class MailService {
 
         if (todos.size() > 5) {
             int remainingTodos = todos.size() - 5;
-            messageBuilder.append("\nand ").append(remainingTodos).append(" more...");
+            messageBuilder.append("\nand ").append(remainingTodos).append(" more...\n\n\n\n");
         }
 
-        messageBuilder.append("If you don't want those emails you can change this in your todo options panel.");
+        messageBuilder.append("If you don't want those emails you can turn off this feature in your todo options panel.");
 
         return constructEmail(subject, messageBuilder.toString(), user.getEmail());
     }
