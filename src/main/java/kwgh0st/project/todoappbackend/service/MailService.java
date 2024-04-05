@@ -127,12 +127,12 @@ public class MailService {
 
         for (int i = 0; i < todosCount; i++) {
             Todo todo = todos.get(i);
-            messageBuilder.append(i + 1).append(". ").append(todo.getDescription()).append("\n");
+            messageBuilder.append(i + 1).append(". ").append(todo.getDescription()).append("\n\n");
         }
 
         if (todos.size() > 5) {
             int remainingTodos = todos.size() - 5;
-            messageBuilder.append("\nand ").append(remainingTodos).append(" more...\n\n\n\n");
+            messageBuilder.append("\nand ").append(remainingTodos).append(" more...\n\n");
         }
 
         messageBuilder.append("If you don't want those emails you can turn off this feature in your todo options panel.");
